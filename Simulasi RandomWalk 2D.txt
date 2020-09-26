@@ -1,0 +1,95 @@
+import random
+import math
+import matplotlib.pyplot as plt
+import matplotlib.animation as animation
+import numpy as np
+ 
+posisiawal_x = random.randint(0,20)
+posisiawal_y = random.randint(0,20)
+fig, ax = plt.subplots()
+infected_x, infected_y = [posisiawal_x], [posisiawal_y]
+randmwalk_x, randmwalk_y = [posisiawal_x], [posisiawal_y]
+startpost_x,startpost_y = [posisiawal_x],[posisiawal_y]
+sc = ax.scatter(infected_x, infected_y, c='Red')
+scs = ax.scatter(randmwalk_x, randmwalk_y, c='Blue')
+scd = ax.scatter(startpost_x,startpost_y, c='Green')
+plt.xlim(0,20)
+plt.ylim(0,20)
+
+def cek_boundary(x) :
+  if x > 19 :
+    return 0
+  elif x < 0 :
+    return 19
+  return x
+
+def random_walk(i):
+    randmwalk_x, randmwalk_y = [], []
+    x = infected_x[-1]
+    y = infected_y[-1]
+    number = random.randint(1, 4) #dua arah atas kiri
+
+    if(number == 1):
+        if(x > 1):
+            x = cek_boundary(x)
+            y = cek_boundary(y)
+            xcurr = x + (-1)
+            ycurr = y + 0
+        else:
+            x = cek_boundary(x)
+            y = cek_boundary(y)
+            xcurr = x
+            ycurr = y
+    elif(number == 2):
+        if(y < 20):
+            x = cek_boundary(x)
+            y = cek_boundary(y)
+            xcurr = x + 0
+            ycurr = y + 1
+        else:
+            x = cek_boundary(x)
+            y = cek_boundary(y)
+            xcurr = x
+            ycurr = y
+    elif(number == 3):
+        if(x < 20):
+            x = cek_boundary(x)
+            y = cek_boundary(y)
+            xcurr = x + 1
+            ycurr = y + 0
+        else:
+            x = cek_boundary(x)
+            y = cek_boundary(y)
+            xcurr = x
+            ycurr = y
+    elif(number == 4):
+        if(y > 1):
+            x = cek_boundary(x)
+            y = cek_boundary(y)
+            xcurr = x + 0
+            ycurr = y + (-1)
+        else:
+            x = cek_boundary(x)
+            y = cek_boundary(y)
+            xcurr = x
+            ycurr = y
+
+    infected_x.append(xcurr)
+    infected_y.append(ycurr)
+    sc.set_offsets(np.c_[infected_x, infected_y])
+
+    randmwalk_x.append(xcurr)
+    randmwalk_y.append(ycurr)
+    scs.set_offsets(np.c_[randmwalk_x, randmwalk_y])
+
+    startpost_x.append(infected_x[0])
+    startpost_y.append(infected_y[0])
+    scd.set_offsets(np.c_[startpost_x,startpost_y])
+
+ 
+ani = animation.FuncAnimation(fig, random_walk, 
+                frames=100, interval=100, repeat=False) 
+
+plt.grid(True, which='both')
+plt.title('Random Walk 2 Dimensi')
+plt.show()
